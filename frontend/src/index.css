@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+Light mode only.
+*/
+
+@layer base {
+  :root {
+    /* Base colors */
+    --background: 220 14% 96%;
+    --foreground: 222 47% 11%;
+
+    /* Card styles */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary - Blue gradient for clock card */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-dark: 221 83% 43%;
+    --primary-gradient-start: 221 83% 53%;
+    --primary-gradient-end: 217 91% 60%;
+
+    /* Secondary - Light gray for inactive nav */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    /* Muted - For subtle text and backgrounds */
+    --muted: 220 13% 91%;
+    --muted-foreground: 220 9% 46%;
+
+    /* Accent - For highlights */
+    --accent: 217 91% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive - For errors and warnings */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Success - For positive indicators */
+    --success: 142 76% 36%;
+    --success-foreground: 142 76% 96%;
+    --success-light: 142 52% 96%;
+
+    /* Warning - For alerts */
+    --warning: 38 92% 50%;
+    --warning-foreground: 38 92% 20%;
+    --warning-light: 48 89% 95%;
+
+    /* Info - For informational elements */
+    --info: 199 89% 48%;
+
+    /* Border and input */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 217 91% 60%;
+
+    /* Radius */
+    --radius: 1rem;
+
+    /* Sidebar - White with subtle styling */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 222 47% 11%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217 91% 60%;
+
+    /* Nav active state */
+    --nav-active: 222 47% 11%;
+    --nav-active-foreground: 0 0% 100%;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+
+    /* Transitions */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
