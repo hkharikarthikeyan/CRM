@@ -62,6 +62,17 @@ class Geofencing(BaseModel):
     longitude: float
     radius: int
 
+class CreateAdminRequest(BaseModel):
+    username: str
+    password: str
+    name: str
+    email: str
+
+class ChangePasswordRequest(BaseModel):
+    username: str
+    old_password: str
+    new_password: str
+
 class LeaveRequest(BaseModel):
     employee_id: str
     employee_name: str
@@ -136,6 +147,46 @@ async def get_current_user(username: str = Depends(verify_token)):
         return {"username": emp['employee_id'], "role": "employee", "name": emp['name'], "email": emp.get('email', '')}
     
     raise HTTPException(status_code=404, detail="User not found")
+
+@app.post("/auth/create-admin")
+async def create_admin(data: CreateAdminRequest):
+    try:
+        existing = supabase.table('users').select('*').eq('username', data.username).execute()
+        print(f"Existing check: {existing.data}")
+        if existing.data:
+            raise HTTPException(status_code=400, detail="Username already exists")
+        hashed = pwd_context.hash(data.password)
+        result = supabase.table('users').insert({
+            'username': data.username,
+            'password': hashed,
+            'role': 'admin',
+            'name': data.name,
+            'email': data.email
+        }).execute()
+        print(f"Insert result: {result.data}")
+        return {"message": "Admin created successfully", "username": data.username}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.put("/auth/change-password")
+async def change_password(data: ChangePasswordRequest):
+    try:
+        result = supabase.table('users').select('*').eq('username', data.username).execute()
+        print(f"Query result: {result.data}, count: {len(result.data) if result.data else 0}")
+    except Exception as e:
+        print(f"DB error: {e}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    if not result.data:
+        raise HTTPException(status_code=404, detail=f"User '{data.username}' not found in users table")
+    user = result.data[0]
+    if not pwd_context.verify(data.old_password, user['password']):
+        raise HTTPException(status_code=401, detail="Old password is incorrect")
+    hashed = pwd_context.hash(data.new_password)
+    supabase.table('users').update({'password': hashed}).eq('username', data.username).execute()
+    return {"message": "Password changed successfully"}
 
 @app.get("/employees")
 async def get_employees():
